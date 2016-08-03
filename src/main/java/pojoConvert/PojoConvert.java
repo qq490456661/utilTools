@@ -1,6 +1,9 @@
 package pojoConvert;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 
 /**
  * Created by linjunjie(490456661@qq.com) on 2016/7/22.
@@ -11,6 +14,11 @@ public class PojoConvert {
         SysConfigInfo sysConfigInfo = new SysConfigInfo();
         SysConfigPojo sysConfigPojo = new SysConfigPojo();
         convert(sysConfigInfo, sysConfigPojo);
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        numberFormat.setMaximumFractionDigits(2);
+        String num = numberFormat.format(303.235);
+        System.out.println(num);
 
     }
 

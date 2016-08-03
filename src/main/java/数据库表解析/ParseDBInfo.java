@@ -11,14 +11,19 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `person` (\n" +
-                "  `user_id` bigint(11) NOT NULL COMMENT '自己的user_id',\n" +
-                "  `other_id` bigint(11) NOT NULL COMMENT '对方的user_id',\n" +
-                "  `created` timestamp NULL default NULL,\n" +
-                "  `modified` timestamp NULL default NULL on update CURRENT_TIMESTAMP,\n" +
-                "  `status` smallint(6) default NULL,\n" +
-                "  KEY `user_other` (`user_id`,`other_id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n";
+        String mytext = "CREATE TABLE `shebao_insured_stopped` (\n" +
+                "  `ID` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `USER_ID` varchar(32) CHARACTER SET utf8 NOT NULL COMMENT '用户uuid',\n" +
+                "  `STOPER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '代停人的user_id',\n" +
+                "  `INSURED_ID` int(11) DEFAULT NULL COMMENT '订单id',\n" +
+                "  `REASON_ID` int(11) DEFAULT NULL COMMENT '停保原因,对应问题question表的id',\n" +
+                "  `ADVICE` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '建议和反馈',\n" +
+                "  `STOP_TIME` datetime DEFAULT NULL COMMENT '停保时间',\n" +
+                "  `GMT_CREATE` datetime NOT NULL COMMENT '创建时间',\n" +
+                "  `GMT_MODIFIED` datetime DEFAULT NULL COMMENT '修改时间',\n" +
+                "  `MEMO` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '备注',\n" +
+                "  PRIMARY KEY (`ID`)\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;\n";
 
         //获取所有字段
         String result = init(mytext);
@@ -59,7 +64,7 @@ public class ParseDBInfo {
             if("".equals(matcher.group())){
                 continue;
             }
-            str.append(matcher.group());
+            str.append(matcher.group().toLowerCase());
         }
         String result = str.toString().replaceAll("``",",");
         result = result.replaceAll("`","");
