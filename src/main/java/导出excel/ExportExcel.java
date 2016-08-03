@@ -6,6 +6,7 @@ package 导出excel;
 
 import jxl.Cell;
 import jxl.Workbook;
+import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -128,7 +130,25 @@ public class ExportExcel {
      * @param sheet 工作空间
      */
     public void queryData(WritableSheet sheet){
-
+        int startRow = 0;
+        Label label = null;
+        List<String> list = null;
+        String item = null;
+        try {
+            int count = 0;
+            for(int i=startRow;i< startRow + list.size() ; i++){
+                count = 0;
+                item = list.get(i - startRow);
+                //序号
+                label = new Label(count++,i+1,String.valueOf(i+1));
+                sheet.addCell(label);
+                //办理人
+                label = new Label(count++,i+1,item);
+                sheet.addCell(label);
+            }
+        } catch (Exception e) {
+            //logger.error("写入excel失败",e);
+        }
     }
 
     /**
