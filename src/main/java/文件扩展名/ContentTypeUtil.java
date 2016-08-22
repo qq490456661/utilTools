@@ -1,4 +1,4 @@
-package æ–‡ä»¶æ‰©å±•å;
+package ÎÄ¼şÀ©Õ¹Ãû;
 
 /**
  * Created by linjunjie(490456661@qq.com) on 2016/5/13.
@@ -6,7 +6,7 @@ package æ–‡ä»¶æ‰©å±•å;
 public class ContentTypeUtil {
 
     /**
-     * è·å¾—æ‰©å±•å
+     * »ñµÃÀ©Õ¹Ãû
      * @return
      */
     public static String getExtension(String contentType){

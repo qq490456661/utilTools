@@ -1,13 +1,11 @@
-package ä¸ƒç‰›äº‘å­˜å‚¨;
+package ÆßÅ£ÔÆ´æ´¢;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import org.apache.log4j.Logger;
-import æ–‡ä»¶æ‰©å±•å.ContentTypeUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -20,19 +18,19 @@ public class QiniuUtil {
 
     private static final Logger logger = Logger.getLogger(QiniuUtil.class);
 
-    private static QiniuUtil qiniuUtils = null;//å•ä¾‹
+    private static QiniuUtil qiniuUtils = null;//µ¥Àı
 
-    //è®¾ç½®å¥½è´¦å·çš„ACCESS_KEYå’ŒSECRET_KEY
+    //ÉèÖÃºÃÕËºÅµÄACCESS_KEYºÍSECRET_KEY
     private static String ACCESS_KEY = "SqaAAOxVR83xZNA8GK1wXZxGK05xbRX0wrjOIJz6";
     private static String SECRET_KEY = "SZ5KytmCShsuZ5tpccRWd8yrgFlJ7t39mNceCjNo";
 
-    //å¯†é’¥é…ç½®
+    //ÃÜÔ¿ÅäÖÃ
     private static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 
-    //è¦ä¸Šä¼ çš„ç©ºé—´
+    //ÒªÉÏ´«µÄ¿Õ¼ä
     private static final String BUCKET_NAME = "osscache";
 
-    //osscacheç»‘å®šçš„å¤–é“¾åœ°å€
+    //osscache°ó¶¨µÄÍâÁ´µØÖ·
     private static final String LINK_DOMAIN = "http://o8y9vs86j.bkt.clouddn.com/";
 
     private QiniuUtil(){
@@ -50,32 +48,32 @@ public class QiniuUtil {
         return qiniuUtils;
     }
 
-    //ç®€å•ä¸Šä¼ ï¼Œä½¿ç”¨é»˜è®¤ç­–ç•¥ï¼Œåªéœ€è¦è®¾ç½®ä¸Šä¼ çš„ç©ºé—´åå°±å¯ä»¥äº†
+    //¼òµ¥ÉÏ´«£¬Ê¹ÓÃÄ¬ÈÏ²ßÂÔ£¬Ö»ĞèÒªÉèÖÃÉÏ´«µÄ¿Õ¼äÃû¾Í¿ÉÒÔÁË
     public String getUpToken(){
         return auth.uploadToken(BUCKET_NAME);
     }
 
     /**
-     * ç®€å•æ–‡ä»¶ä¸Šä¼ åŠŸèƒ½
-     * @param fileName è¿œç¨‹äº‘ä¿å­˜çš„æ–‡ä»¶åå­—
-     * @param localFilePath æœ¬åœ°æœåŠ¡å™¨æ–‡ä»¶è·¯å¾„
+     * ¼òµ¥ÎÄ¼şÉÏ´«¹¦ÄÜ
+     * @param fileName Ô¶³ÌÔÆ±£´æµÄÎÄ¼şÃû×Ö
+     * @param localFilePath ±¾µØ·şÎñÆ÷ÎÄ¼şÂ·¾¶
      * @throws IOException
      */
     public void upload(String fileName,String localFilePath) throws Exception {
         int count = 0;
         while(count++ < 3) {
             try {
-                //åˆ›å»ºä¸Šä¼ å¯¹è±¡
+                //´´½¨ÉÏ´«¶ÔÏó
                 UploadManager uploadManager = new UploadManager();
-                //è°ƒç”¨putæ–¹æ³•ä¸Šä¼ 
+                //µ÷ÓÃput·½·¨ÉÏ´«
                 Response res = uploadManager.put(localFilePath, fileName, getUpToken());
                 //System.out.println(res.bodyString());
                 break;
             } catch (QiniuException e) {
                 Response r = e.response;
-                logger.error(MessageFormat.format("ä¸ƒç‰›ä¸Šä¼ æ–‡ä»¶å¤±è´¥,fileName:{0}",new Object[]{fileName}),e);
+                logger.error(MessageFormat.format("ÆßÅ£ÉÏ´«ÎÄ¼şÊ§°Ü,fileName:{0}",new Object[]{fileName}),e);
                 try {
-                    //å“åº”çš„æ–‡æœ¬ä¿¡æ¯
+                    //ÏìÓ¦µÄÎÄ±¾ĞÅÏ¢
                     System.out.println(r.bodyString());
                 } catch (QiniuException e1) {
                     //ignore
@@ -85,15 +83,15 @@ public class QiniuUtil {
     }
 
     /**
-     * è·å–ä¸‹è½½é“¾æ¥
+     * »ñÈ¡ÏÂÔØÁ´½Ó
      */
     public String getDownloadLink(String fileName){
-        return auth.privateDownloadUrl(new StringBuilder(LINK_DOMAIN).append(fileName).toString(),3600);//3600æ˜¯é“¾æ¥æœ‰æ•ˆæ—¶é—´
+        return auth.privateDownloadUrl(new StringBuilder(LINK_DOMAIN).append(fileName).toString(),3600);//3600ÊÇÁ´½ÓÓĞĞ§Ê±¼ä
     }
 
 
     /**
-     * è·å–æ—¥æœŸyyyyMMdd
+     * »ñÈ¡ÈÕÆÚyyyyMMdd
      * @return
      */
     private static int count = 0;
@@ -104,10 +102,10 @@ public class QiniuUtil {
     }
 
     /**
-     * ä¸Springå¯¹æ¥,ä¸Šä¼ çš„æ¥å£
-     * å…ˆå­˜å‚¨åœ¨uploadæ–‡ä»¶å¤¹ï¼Œå†è¯»å–å‡ºæ¥å­˜å‚¨åœ¨åƒç‰›äº‘
-     * @param pic  MultipartFileæ˜¯Springçš„æ–‡ä»¶
-     * @return ä¿å­˜åœ¨æœ¬åœ°æ–‡ä»¶çš„åå­—
+     * ÓëSpring¶Ô½Ó,ÉÏ´«µÄ½Ó¿Ú
+     * ÏÈ´æ´¢ÔÚuploadÎÄ¼ş¼Ğ£¬ÔÙ¶ÁÈ¡³öÀ´´æ´¢ÔÚÇ§Å£ÔÆ
+     * @param pic  MultipartFileÊÇSpringµÄÎÄ¼ş
+     * @return ±£´æÔÚ±¾µØÎÄ¼şµÄÃû×Ö
      */
     /*
     public String uploadPic(MultipartFile pic)throws Exception{
@@ -122,7 +120,7 @@ public class QiniuUtil {
         try {
             pic.transferTo(localFile);
         }catch(Exception e){
-            logger.error(MessageFormat.format("æœ¬åœ°æœåŠ¡å™¨ä¿å­˜å›¾ç‰‡å¤±è´¥,fileName:{0},savePath:{1}",new Object[]{fileName,savePath}),e);
+            logger.error(MessageFormat.format("±¾µØ·şÎñÆ÷±£´æÍ¼Æ¬Ê§°Ü,fileName:{0},savePath:{1}",new Object[]{fileName,savePath}),e);
         }
         QiniuUtil.getInstance().upload(fileName.toString(),savePath.toString());
         return fileName.toString();

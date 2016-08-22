@@ -10,6 +10,8 @@ import java.text.NumberFormat;
  */
 public class PojoConvert {
 
+
+
     public static void main(String[] args) {
         SysConfigInfo sysConfigInfo = new SysConfigInfo();
         SysConfigPojo sysConfigPojo = new SysConfigPojo();
@@ -19,6 +21,15 @@ public class PojoConvert {
         numberFormat.setMaximumFractionDigits(2);
         String num = numberFormat.format(303.235);
         System.out.println(num);
+
+
+
+
+
+    }
+
+    public static void numberFormat(String amount){
+        BigDecimal money = new BigDecimal(amount);
 
     }
 

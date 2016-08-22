@@ -1,4 +1,4 @@
-package æ•°æ®åº“è¡¨è§£æ;
+package Êı¾İ¿â±í½âÎö;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,26 +10,28 @@ public class ParseDBInfo {
 
 
     public static void main(String[] args) {
-        //å¾…è§£æçš„æ•°æ®åº“è¡¨
-        String mytext = "CREATE TABLE `shebao_insured_stopped` (\n" +
-                "  `ID` int(11) NOT NULL AUTO_INCREMENT,\n" +
-                "  `USER_ID` varchar(32) CHARACTER SET utf8 NOT NULL COMMENT 'ç”¨æˆ·uuid',\n" +
-                "  `STOPER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'ä»£åœäººçš„user_id',\n" +
-                "  `INSURED_ID` int(11) DEFAULT NULL COMMENT 'è®¢å•id',\n" +
-                "  `REASON_ID` int(11) DEFAULT NULL COMMENT 'åœä¿åŸå› ,å¯¹åº”é—®é¢˜questionè¡¨çš„id',\n" +
-                "  `ADVICE` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'å»ºè®®å’Œåé¦ˆ',\n" +
-                "  `STOP_TIME` datetime DEFAULT NULL COMMENT 'åœä¿æ—¶é—´',\n" +
-                "  `GMT_CREATE` datetime NOT NULL COMMENT 'åˆ›å»ºæ—¶é—´',\n" +
-                "  `GMT_MODIFIED` datetime DEFAULT NULL COMMENT 'ä¿®æ”¹æ—¶é—´',\n" +
-                "  `MEMO` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'å¤‡æ³¨',\n" +
-                "  PRIMARY KEY (`ID`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;\n";
+        //´ı½âÎöµÄÊı¾İ¿â±í
+        String mytext = "CREATE TABLE `mall_banner` (\n" +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `type` varchar(16) DEFAULT NULL COMMENT 'bannerÀàĞÍ',\n" +
+                "  `img_url` varchar(256) DEFAULT NULL COMMENT 'µØÖ·url',\n" +
+                "  `page_url` varchar(256) DEFAULT NULL COMMENT 'Ò³ÃæµØÖ·',\n" +
+                "  `descs` varchar(256) DEFAULT NULL,\n" +
+                "  `state` varchar(16) DEFAULT 'ENABLED' COMMENT '×´Ì¬',\n" +
+                "  `memo` varchar(128) DEFAULT NULL,\n" +
+                "  `GMT_CREATE` datetime DEFAULT NULL,\n" +
+                "  `CREATER` int(11) DEFAULT NULL,\n" +
+                "  `GMT_MODIFIED` datetime DEFAULT NULL,\n" +
+                "  `MODIFIER` int(11) DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`id`),\n" +
+                "  KEY `type` (`type`,`state`)\n" +
+                ") ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;\n";
 
-        //è·å–æ‰€æœ‰å­—æ®µ
+        //»ñÈ¡ËùÓĞ×Ö¶Î
         String result = init(mytext);
 
         System.out.println(result);
-        // è·å– as å–åˆ«å other_id as otherId
+        // »ñÈ¡ as È¡±ğÃû other_id as otherId
         System.out.println(getAs(result));
         //a.status
         System.out.println(getAAs(result));
@@ -39,18 +41,20 @@ public class ParseDBInfo {
         System.out.println(getJin(result));
         //a.status = #status#
         System.out.println(getFieldsEqualsJin(result));
+        //private String xxx;
+        System.out.println(getMemberProperties(result));
 
 
     }
 
     /**
-     * æ–¹æ³•ä¸€ï¼šè·å–è¡¨ä¸­çš„æ‰€æœ‰å­—æ®µ
+     * ·½·¨Ò»£º»ñÈ¡±íÖĞµÄËùÓĞ×Ö¶Î
      * @param mytext
      * @return
      */
     public static String init(String mytext){
         int index = -1;
-        //ç”±äºKEYå­—æ®µæ˜¯æœ€åé¢çš„ç´¢å¼•å†…å®¹ï¼Œå¯ä»¥åˆ é™¤æ‰
+        //ÓÉÓÚKEY×Ö¶ÎÊÇ×îºóÃæµÄË÷ÒıÄÚÈİ£¬¿ÉÒÔÉ¾³ıµô
         mytext = mytext.substring(0,(index = mytext.indexOf("KEY")) == -1 ? mytext.length() : index);
 
         Pattern pattern = Pattern.compile("(`.*`)*");
@@ -72,7 +76,7 @@ public class ParseDBInfo {
     }
 
     /**
-     * è·å–è¿™æ ·çš„å­—æ®µ( a.id = #id# )
+     * »ñÈ¡ÕâÑùµÄ×Ö¶Î( a.id = #id# )
      * @param result
      * @return
      */
@@ -199,7 +203,7 @@ public class ParseDBInfo {
         return sbchar.substring(0,sbchar.length()-1).toString();
     }
 
-    //è·å¾—æœ‰#å·çš„
+    //»ñµÃÓĞ#ºÅµÄ
     public static String getJin(String result){
         String[] strs = result.split(",");
         char[] chars = null;
@@ -225,6 +229,37 @@ public class ParseDBInfo {
                 sbchar.append(item);
             }
             sbchar.append("#,");
+        }
+
+        return sbchar.substring(0,sbchar.length()-1).toString();
+    }
+
+    //»ñÈ¡ private String xxxx;
+    public static String getMemberProperties(String result){
+        String[] strs = result.split(",");
+        char[] chars = null;
+        StringBuilder sbchar = new StringBuilder();
+        int flag = 0;
+        for(String item : strs){
+            sbchar.append("private String ");
+            chars = item.toCharArray();
+            if(item.indexOf("_") != -1){
+                for(char c : chars){
+                    if(c == '_'){
+                        flag = 1;
+                    }else{
+                        if(flag == 1){
+                            flag = 0;
+                            sbchar.append(Character.toUpperCase(c));
+                        }else{
+                            sbchar.append(c);
+                        }
+                    }
+                }
+            }else{
+                sbchar.append(item);
+            }
+            sbchar.append(";\n");
         }
 
         return sbchar.substring(0,sbchar.length()-1).toString();
