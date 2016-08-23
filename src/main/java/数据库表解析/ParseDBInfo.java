@@ -11,33 +11,18 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `cif_user` (\n" +
-                "  `ID` int(10) NOT NULL AUTO_INCREMENT,\n" +
-                "  `USER_ID` varchar(32) NOT NULL COMMENT '用户id',\n" +
-                "  `PLATFORM_CODE` varchar(32) DEFAULT NULL COMMENT '平台编号，针对不同的商户适配',\n" +
-                "  `REAL_NAME` varchar(64) DEFAULT NULL COMMENT '用户姓名',\n" +
-                "  `STATUS` varchar(32) NOT NULL COMMENT '状态',\n" +
-                "  `CERT_TYPE` varchar(32) DEFAULT NULL COMMENT '证件类型',\n" +
-                "  `CERT_NO` varchar(128) DEFAULT NULL COMMENT '证件号',\n" +
-                "  `CELL` varchar(16) NOT NULL COMMENT '手机号',\n" +
-                "  `GMT_CREATE` datetime NOT NULL COMMENT '创建时间',\n" +
-                "  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',\n" +
-                "  `GMT_MODIFIED` datetime NOT NULL,\n" +
-                "  `MODIFIER` varchar(32) DEFAULT NULL,\n" +
-                "  `LOGIN_PASSWD` varchar(32) DEFAULT NULL COMMENT '登录密码',\n" +
-                "  `PAY_PASSWD` varchar(32) DEFAULT NULL COMMENT '支付密码',\n" +
-                "  `REGISTER_FROM_ID` varchar(16) DEFAULT NULL COMMENT '用户来源ID',\n" +
-                "  `REGISTER_FROM_TYPE` varchar(32) DEFAULT NULL COMMENT '用户来源类型',\n" +
-                "  `EXT_INFO` varchar(32) DEFAULT NULL COMMENT '防钓鱼信息',\n" +
-                "  `RETRY_PAY_PASSWORD` int(11) DEFAULT NULL,\n" +
-                "  `VALID` varchar(16) DEFAULT NULL COMMENT '身份证有效期',\n" +
-                "  `POLL_CODE` varchar(16) DEFAULT NULL COMMENT '推广码',\n" +
-                "  `GMT_REGISTER` datetime DEFAULT NULL,\n" +
-                "  `EMAIL` varchar(32) DEFAULT NULL,\n" +
-                "  `ADDRESS` varchar(256) DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`ID`),\n" +
-                "  UNIQUE KEY `IDX_PLATFORM_CODE_AND_CELL` (`PLATFORM_CODE`,`CELL`) USING BTREE\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=5072 DEFAULT CHARSET=utf8;\n" +
+        String mytext = "CREATE TABLE `student_school_log` (\n" +
+                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
+                "  `user_id` bigint(20) DEFAULT NULL COMMENT '机构id',\n" +
+                "  `study_no` varchar(16) DEFAULT NULL COMMENT '学号',\n" +
+                "  `course_name` varchar(32) DEFAULT NULL COMMENT '课程名字',\n" +
+                "  `condition` varchar(64) DEFAULT NULL COMMENT '孩子状况',\n" +
+                "  `remark` varchar(512) DEFAULT NULL COMMENT '老师备注',\n" +
+                "  `created` timestamp NULL DEFAULT NULL,\n" +
+                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
+                "  `status` smallint(6) DEFAULT NULL COMMENT '状态 0删除 1正常',\n" +
+                "  PRIMARY KEY (`id`)\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学生每天上课的状况日志';\n" +
                 "\n";
 
         //获取所有字段
