@@ -5,6 +5,8 @@ package 文件扩展名;
  */
 public class ContentTypeUtil {
 
+
+
     /**
      * 获得扩展名
      * @return

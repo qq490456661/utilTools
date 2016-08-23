@@ -11,21 +11,34 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `mall_banner` (\n" +
-                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
-                "  `type` varchar(16) DEFAULT NULL COMMENT 'banner类型',\n" +
-                "  `img_url` varchar(256) DEFAULT NULL COMMENT '地址url',\n" +
-                "  `page_url` varchar(256) DEFAULT NULL COMMENT '页面地址',\n" +
-                "  `descs` varchar(256) DEFAULT NULL,\n" +
-                "  `state` varchar(16) DEFAULT 'ENABLED' COMMENT '状态',\n" +
-                "  `memo` varchar(128) DEFAULT NULL,\n" +
-                "  `GMT_CREATE` datetime DEFAULT NULL,\n" +
-                "  `CREATER` int(11) DEFAULT NULL,\n" +
-                "  `GMT_MODIFIED` datetime DEFAULT NULL,\n" +
-                "  `MODIFIER` int(11) DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`id`),\n" +
-                "  KEY `type` (`type`,`state`)\n" +
-                ") ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;\n";
+        String mytext = "CREATE TABLE `cif_user` (\n" +
+                "  `ID` int(10) NOT NULL AUTO_INCREMENT,\n" +
+                "  `USER_ID` varchar(32) NOT NULL COMMENT '用户id',\n" +
+                "  `PLATFORM_CODE` varchar(32) DEFAULT NULL COMMENT '平台编号，针对不同的商户适配',\n" +
+                "  `REAL_NAME` varchar(64) DEFAULT NULL COMMENT '用户姓名',\n" +
+                "  `STATUS` varchar(32) NOT NULL COMMENT '状态',\n" +
+                "  `CERT_TYPE` varchar(32) DEFAULT NULL COMMENT '证件类型',\n" +
+                "  `CERT_NO` varchar(128) DEFAULT NULL COMMENT '证件号',\n" +
+                "  `CELL` varchar(16) NOT NULL COMMENT '手机号',\n" +
+                "  `GMT_CREATE` datetime NOT NULL COMMENT '创建时间',\n" +
+                "  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',\n" +
+                "  `GMT_MODIFIED` datetime NOT NULL,\n" +
+                "  `MODIFIER` varchar(32) DEFAULT NULL,\n" +
+                "  `LOGIN_PASSWD` varchar(32) DEFAULT NULL COMMENT '登录密码',\n" +
+                "  `PAY_PASSWD` varchar(32) DEFAULT NULL COMMENT '支付密码',\n" +
+                "  `REGISTER_FROM_ID` varchar(16) DEFAULT NULL COMMENT '用户来源ID',\n" +
+                "  `REGISTER_FROM_TYPE` varchar(32) DEFAULT NULL COMMENT '用户来源类型',\n" +
+                "  `EXT_INFO` varchar(32) DEFAULT NULL COMMENT '防钓鱼信息',\n" +
+                "  `RETRY_PAY_PASSWORD` int(11) DEFAULT NULL,\n" +
+                "  `VALID` varchar(16) DEFAULT NULL COMMENT '身份证有效期',\n" +
+                "  `POLL_CODE` varchar(16) DEFAULT NULL COMMENT '推广码',\n" +
+                "  `GMT_REGISTER` datetime DEFAULT NULL,\n" +
+                "  `EMAIL` varchar(32) DEFAULT NULL,\n" +
+                "  `ADDRESS` varchar(256) DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`ID`),\n" +
+                "  UNIQUE KEY `IDX_PLATFORM_CODE_AND_CELL` (`PLATFORM_CODE`,`CELL`) USING BTREE\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=5072 DEFAULT CHARSET=utf8;\n" +
+                "\n";
 
         //获取所有字段
         String result = init(mytext);
