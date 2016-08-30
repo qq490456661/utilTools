@@ -12,21 +12,46 @@ public class IpUtil {
 
     public static void main(String[] args) {
         String ip = "103.41.132.34";
-        String [] iparr = ip.split("\\.");
-        int intip = 0;
-        for(String i : iparr){
+
+        long iplong = ipConvertToInt(ip);
+        String ipAddress = intToConvertToIp(iplong);
+    }
+
+
+    /**
+     * 字符串Ip地址转换为int数字
+     * @param ipAddress
+     */
+    public static long ipConvertToInt(String ipAddress){
+        System.out.println("您的IP地址是:"+ipAddress);
+        long intip = -1;
+        if(ipAddress == null)
+            return intip;
+        String[] ips = ipAddress.split("\\.");
+        for(String i : ips){
             intip = intip << 8;  //第一次左移也无意义
             intip = intip | (Integer.valueOf(i) & 255);
-            System.out.println(intip);
         }
-        System.out.println(intip);
+        return intip;
+    }
 
+    /**
+     * int转化为IP
+     * @param intip
+     * @return
+     */
+    public static String intToConvertToIp(long intip){
+        StringBuilder ipAddress = new StringBuilder();
         int[] intarr = new int[4];
         for(int i=0;i<intarr.length;i++){
-            intarr[i] = intip & 255;
+            intarr[i] = (int)(intip & 255);
             intip = intip >>> 8;
+            ipAddress.insert(0,intarr[i]);
+            if(i < intarr.length - 1){
+                ipAddress.insert(0,".");
+            }
         }
-        System.out.println(intarr[3]+"."+intarr[2]+"."+intarr[1]+"."+intarr[0]);
+        return ipAddress.toString();
     }
 
 }
