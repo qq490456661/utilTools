@@ -6,6 +6,7 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Currency;
 
 
@@ -991,8 +992,8 @@ public class Money implements Serializable, Comparable<Money> {
      * @return 一个新的money对象
      */
     public Money toIntMoney() {
-        return null;
-        //return new Money(MathUtils.scale(NumberUtils.toDouble(this.toString()), 0));
+
+        return new Money(new BigDecimal(NumberUtils.toDouble(this.toString(), 0)).setScale(0,BigDecimal.ROUND_HALF_UP));
     }
 
     public static int[] getCentfactors() {

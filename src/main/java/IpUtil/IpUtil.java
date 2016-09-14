@@ -15,6 +15,9 @@ public class IpUtil {
 
         long iplong = ipConvertToInt(ip);
         String ipAddress = intToConvertToIp(iplong);
+        System.out.println(ipAddress);
+        System.out.println(intToConvertToIp(2130706433));
+
     }
 
 

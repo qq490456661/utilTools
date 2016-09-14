@@ -1,4 +1,4 @@
-package 数据库表解析;
+package DatabaseParse;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,18 +11,15 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `student_school_log` (\n" +
-                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
-                "  `user_id` bigint(20) DEFAULT NULL COMMENT '机构id',\n" +
-                "  `study_no` varchar(16) DEFAULT NULL COMMENT '学号',\n" +
-                "  `course_name` varchar(32) DEFAULT NULL COMMENT '课程名字',\n" +
-                "  `condition` varchar(64) DEFAULT NULL COMMENT '孩子状况',\n" +
-                "  `remark` varchar(512) DEFAULT NULL COMMENT '老师备注',\n" +
-                "  `created` timestamp NULL DEFAULT NULL,\n" +
-                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
-                "  `status` smallint(6) DEFAULT NULL COMMENT '状态 0删除 1正常',\n" +
+        String mytext = "CREATE TABLE `shebao_yijiuser` (\n" +
+                "  `id` int(11) NOT NULL,\n" +
+                "  `user_id` varchar(32) DEFAULT NULL COMMENT 'user_id',\n" +
+                "  `yijiuser_id` varchar(32) DEFAULT NULL COMMENT '易极付user_id',\n" +
+                "  `gmt_create` datetime DEFAULT NULL,\n" +
+                "  `gmt_modified` datetime DEFAULT NULL,\n" +
+                "  `memo` varchar(255) DEFAULT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学生每天上课的状况日志';\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='易极付注册用户id';\n" +
                 "\n";
 
         //获取所有字段
