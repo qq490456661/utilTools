@@ -11,34 +11,32 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `shop_order` (\n" +
-                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
-                "  `goods_name` varchar(200) DEFAULT NULL COMMENT '商品信息',\n" +
-                "  `goods_num` int(11) DEFAULT NULL COMMENT '本单出售的商品数量',\n" +
-                "  `goods_id` varchar(32) DEFAULT NULL COMMENT '商品id',\n" +
-                "  `goods_category` varchar(32) DEFAULT NULL COMMENT '类目名称',\n" +
-                "  `shop_name` varchar(32) DEFAULT NULL COMMENT '店铺名称',\n" +
-                "  `shop_owner` varchar(32) DEFAULT NULL COMMENT '店铺掌柜',\n" +
-                "  `shop_platform` varchar(8) DEFAULT NULL COMMENT '店铺平台：天猫，淘宝',\n" +
-                "  `income_rate` decimal(24,2) DEFAULT NULL COMMENT '收入比率',\n" +
-                "  `share_rate` decimal(24,2) DEFAULT NULL COMMENT '分成比率',\n" +
-                "  `pay_price` decimal(24,2) DEFAULT NULL COMMENT '付款金额',\n" +
-                "  `pay_evaluate` decimal(24,2) DEFAULT NULL COMMENT '效果预估',\n" +
-                "  `settle_price` decimal(24,2) DEFAULT NULL COMMENT '结算金额',\n" +
-                "  `settle_income` decimal(24,2) DEFAULT NULL COMMENT '预估结算收入(结工资按此字段来结)',\n" +
-                "  `order_no` varchar(32) DEFAULT '' COMMENT '订单号',\n" +
-                "  `order_status` varchar(16) DEFAULT NULL COMMENT '订单状态 （这是淘宝给我们的状态，订单付款，订单失效，订单结算）',\n" +
-                "  `order_create` timestamp NULL DEFAULT NULL COMMENT '订单创建时间',\n" +
-                "  `settle_time` timestamp NULL DEFAULT NULL COMMENT '订单结算时间',\n" +
-                "  `settle_status` smallint(6) DEFAULT NULL COMMENT '结算状态  0未结算 1已结算  （给代理发钱时标记为1）',\n" +
-                "  `billboard_id` varchar(16) DEFAULT NULL COMMENT '广告位id',\n" +
-                "  `billboard_name` varchar(32) DEFAULT NULL COMMENT '广告位名字',\n" +
-                "  `pay_platform` varchar(8) DEFAULT NULL COMMENT '成交平台 无线，pc',\n" +
-                "  `created` timestamp NULL DEFAULT NULL,\n" +
-                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
-                "  `status` smallint(6) DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;\n" +
+        String mytext = "CREATE TABLE `pd_product` (\n" +
+                "  `ID` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `CODE` varchar(20) NOT NULL COMMENT '产品编号',\n" +
+                "  `MIN_PURCHASE_AMOUNT` decimal(21,4) NOT NULL COMMENT '最小申购金额',\n" +
+                "  `MAX_PURCHASE_AMOUNT` decimal(21,4) DEFAULT '10000000000.0000' COMMENT '最大申购金额',\n" +
+                "  `PRODUCT_NAME` varchar(64) NOT NULL COMMENT '产品名称',\n" +
+                "  `PRODUCT_TYPE` varchar(10) DEFAULT '' COMMENT '产品类别:聚财,合盘贷等',\n" +
+                "  `COLOCATION_BANK` varchar(16) DEFAULT NULL COMMENT '产品托管行',\n" +
+                "  `CHARGE_FEE` decimal(21,4) DEFAULT '0.0000' COMMENT '手续费',\n" +
+                "  `BOND_FEE` decimal(21,4) DEFAULT '0.0000' COMMENT '@desc 保证金金额比例',\n" +
+                "  `PRODUCT_INFO` text COMMENT '产品说明',\n" +
+                "  `LOANER_INFO` text COMMENT '借款人说明',\n" +
+                "  `SECURITY_INFO` text COMMENT '资金安全说明',\n" +
+                "  `STATUS` varchar(16) DEFAULT NULL COMMENT '产品展示状态  enable:展示  unabled:不展示 ',\n" +
+                "  `NHSY` double(10,4) DEFAULT '0.0000' COMMENT '年化收益',\n" +
+                "  `SGBZ` varchar(16) DEFAULT NULL COMMENT '申购标识  YES:可申购  NO:不可申购',\n" +
+                "  `SECURITY_LEVEL` varchar(16) DEFAULT NULL COMMENT '安全级别',\n" +
+                "  `RELEASE_CHANNEL` varchar(16) NOT NULL COMMENT '发布渠道（APP：app渠道，PC：pc渠道，NOT DIFF：不区分）',\n" +
+                "  `PURCHASE_LEVEL` varchar(10) DEFAULT '' COMMENT '购买类别:新手,VIP,无限制等',\n" +
+                "  `GMT_CREATE` datetime DEFAULT NULL COMMENT '创建日期',\n" +
+                "  `GMT_MODIFIED` datetime DEFAULT NULL COMMENT '修改日期',\n" +
+                "  `MEMO` varchar(128) DEFAULT NULL COMMENT '备注',\n" +
+                "  PRIMARY KEY (`ID`),\n" +
+                "  UNIQUE KEY `id_pd_code` (`CODE`) USING BTREE,\n" +
+                "  KEY `id_pd_name` (`PRODUCT_NAME`) USING BTREE\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=16939 DEFAULT CHARSET=utf8 COMMENT='产品基本信息表';\n" +
                 "\n";
 
         //获取所有字段
