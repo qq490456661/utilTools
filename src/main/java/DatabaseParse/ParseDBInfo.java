@@ -11,15 +11,34 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `shebao_yijiuser` (\n" +
-                "  `id` int(11) NOT NULL,\n" +
-                "  `user_id` varchar(32) DEFAULT NULL COMMENT 'user_id',\n" +
-                "  `yijiuser_id` varchar(32) DEFAULT NULL COMMENT '易极付user_id',\n" +
-                "  `gmt_create` datetime DEFAULT NULL,\n" +
-                "  `gmt_modified` datetime DEFAULT NULL,\n" +
-                "  `memo` varchar(255) DEFAULT NULL,\n" +
+        String mytext = "CREATE TABLE `shop_order` (\n" +
+                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
+                "  `goods_name` varchar(200) DEFAULT NULL COMMENT '商品信息',\n" +
+                "  `goods_num` int(11) DEFAULT NULL COMMENT '本单出售的商品数量',\n" +
+                "  `goods_id` varchar(32) DEFAULT NULL COMMENT '商品id',\n" +
+                "  `goods_category` varchar(32) DEFAULT NULL COMMENT '类目名称',\n" +
+                "  `shop_name` varchar(32) DEFAULT NULL COMMENT '店铺名称',\n" +
+                "  `shop_owner` varchar(32) DEFAULT NULL COMMENT '店铺掌柜',\n" +
+                "  `shop_platform` varchar(8) DEFAULT NULL COMMENT '店铺平台：天猫，淘宝',\n" +
+                "  `income_rate` decimal(24,2) DEFAULT NULL COMMENT '收入比率',\n" +
+                "  `share_rate` decimal(24,2) DEFAULT NULL COMMENT '分成比率',\n" +
+                "  `pay_price` decimal(24,2) DEFAULT NULL COMMENT '付款金额',\n" +
+                "  `pay_evaluate` decimal(24,2) DEFAULT NULL COMMENT '效果预估',\n" +
+                "  `settle_price` decimal(24,2) DEFAULT NULL COMMENT '结算金额',\n" +
+                "  `settle_income` decimal(24,2) DEFAULT NULL COMMENT '预估结算收入(结工资按此字段来结)',\n" +
+                "  `order_no` varchar(32) DEFAULT '' COMMENT '订单号',\n" +
+                "  `order_status` varchar(16) DEFAULT NULL COMMENT '订单状态 （这是淘宝给我们的状态，订单付款，订单失效，订单结算）',\n" +
+                "  `order_create` timestamp NULL DEFAULT NULL COMMENT '订单创建时间',\n" +
+                "  `settle_time` timestamp NULL DEFAULT NULL COMMENT '订单结算时间',\n" +
+                "  `settle_status` smallint(6) DEFAULT NULL COMMENT '结算状态  0未结算 1已结算  （给代理发钱时标记为1）',\n" +
+                "  `billboard_id` varchar(16) DEFAULT NULL COMMENT '广告位id',\n" +
+                "  `billboard_name` varchar(32) DEFAULT NULL COMMENT '广告位名字',\n" +
+                "  `pay_platform` varchar(8) DEFAULT NULL COMMENT '成交平台 无线，pc',\n" +
+                "  `created` timestamp NULL DEFAULT NULL,\n" +
+                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
+                "  `status` smallint(6) DEFAULT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='易极付注册用户id';\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;\n" +
                 "\n";
 
         //获取所有字段

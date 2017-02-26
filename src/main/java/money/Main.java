@@ -1,4 +1,4 @@
-package ½ð¶î;
+package money;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -9,7 +9,7 @@ import java.math.MathContext;
 public class Main {
 
     public static void main(String[] args) {
-        Money money = new Money(1000000.5558);
+       Money money = new Money(1000000.5558);
         System.out.println(money.toLevelString());
         System.out.println(money.toIntMoney());
 
