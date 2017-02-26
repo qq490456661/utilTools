@@ -14,13 +14,16 @@ public class RedisCacheManager implements CacheManager{
 
     @Override
     public Boolean set(String key, String value) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             if ("OK".equalsIgnoreCase(jedis.set(key, value))) {
                 return true;
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         //失败 或 异常 都是false
         return false;
@@ -28,80 +31,99 @@ public class RedisCacheManager implements CacheManager{
 
     @Override
     public Boolean set(String key, String value, Long expire) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             if ("OK".equalsIgnoreCase(jedis.set(key, value, "", "", expire))) {
                 return true;
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return false;
     }
 
     @Override
     public Boolean set(String key, Object value) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             if ("OK".equalsIgnoreCase(jedis.set(key.getBytes(), SerializeUtil.serialize(value)))) {
                 return true;
             }
         }catch(Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return false;
     }
 
     @Override
     public Boolean set(String key, Object value, Long expire) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             if ("OK".equalsIgnoreCase(jedis.set(key.getBytes(), SerializeUtil.serialize(value), null, null, expire))) {
                 return true;
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return false;
     }
 
     @Override
     public String getString(String key) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             return jedis.get(key);
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return null;
     }
 
     @Override
     public Object getObject(String key) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             return SerializeUtil.unserialize(jedis.get(key.getBytes()));
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return null;
     }
 
     @Override
     public <T> T get(String key, Class<T> className) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             return (T)SerializeUtil.unserialize(jedis.get(key.getBytes()));
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return null;
     }
 
     @Override
     public Boolean remove(String key) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
+            jedis = RedisUtil.getJedis();
             /*if (jedis.del(key) > 0) {
                 return true;
             }else{
@@ -111,18 +133,22 @@ public class RedisCacheManager implements CacheManager{
             return true;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return null;
     }
 
     @Override
     public Boolean exists(String key) {
+        Jedis jedis = null;
         try {
-            Jedis jedis = RedisUtil.getJedis();
-
+            jedis = RedisUtil.getJedis();
             return jedis.exists(key);
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            RedisUtil.returnResource(jedis);
         }
         return null;
     }
