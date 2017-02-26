@@ -30,11 +30,12 @@ public class RedisCacheManager implements CacheManager{
     }
 
     @Override
-    public Boolean set(String key, String value, Long expire) {
+    public Boolean set(String key, String value, int expire) {
         Jedis jedis = null;
         try {
             jedis = RedisUtil.getJedis();
-            if ("OK".equalsIgnoreCase(jedis.set(key, value, "", "", expire))) {
+            if ("OK".equalsIgnoreCase(jedis.set(key, value))) {
+                jedis.expire(key,expire);
                 return true;
             }
         }catch (Exception e){
@@ -62,11 +63,12 @@ public class RedisCacheManager implements CacheManager{
     }
 
     @Override
-    public Boolean set(String key, Object value, Long expire) {
+    public Boolean set(String key, Object value, int expire) {
         Jedis jedis = null;
         try {
             jedis = RedisUtil.getJedis();
-            if ("OK".equalsIgnoreCase(jedis.set(key.getBytes(), SerializeUtil.serialize(value), null, null, expire))) {
+            if ("OK".equalsIgnoreCase(jedis.set(key.getBytes(), SerializeUtil.serialize(value)))) {
+                jedis.expire(key,expire);
                 return true;
             }
         }catch (Exception e){

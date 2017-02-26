@@ -8,11 +8,11 @@ public interface CacheManager {
     /** set ²Ù×÷ */
     public Boolean set(String key,String value);
 
-    public Boolean set(String key,String value,Long expire);
+    public Boolean set(String key,String value,int expire);
 
     public Boolean set(String key,Object value);
 
-    public Boolean set(String key,Object value,Long expire);
+    public Boolean set(String key,Object value,int expire);
 
     /** get ²Ù×÷*/
     public String getString(String key);
