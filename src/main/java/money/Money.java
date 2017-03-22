@@ -1,4 +1,4 @@
-package ½ð¶î;
+package money;
 
 
 import org.apache.commons.lang.StringUtils;
