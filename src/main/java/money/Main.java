@@ -38,6 +38,35 @@ public class Main {
         String s = xmlToJsonString(xml);
         System.out.println(s);*/
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date ad =  sdf.parse("2017-04-19 15:00:00");
+
+        Date bd =  sdf.parse("2017-04-20 15:00:00");
+
+        List<Date> list = new ArrayList<Date>();
+        list.add(ad);
+        list.add(bd);
+
+        //排序 时间近的靠前
+        Collections.sort(list, new Comparator<Date>() {
+            @Override
+            public int compare(Date o1, Date o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        System.out.println(list);
+
+
+
+        String t1 = "01974";
+        String t2 = "11000";
+        int r1 = Integer.parseInt(t1);
+        int r2 = Integer.parseInt(t2);
+        System.out.println(r1 + " "+ r2);
+
+
+
 
     }
 

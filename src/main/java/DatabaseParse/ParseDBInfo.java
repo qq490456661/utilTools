@@ -11,18 +11,17 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `user_birthday` (\n" +
-                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+        String mytext = "CREATE TABLE `excel_invest_user` (\n" +
+                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
                 "  `user_id` varchar(32) DEFAULT NULL,\n" +
-                "  `sex` varchar(4) DEFAULT NULL COMMENT '性别',\n" +
-                "  `birth_year` varchar(6) DEFAULT NULL COMMENT '出生年份',\n" +
-                "  `birth_month` varchar(6) DEFAULT NULL COMMENT '月',\n" +
-                "  `birth_date` varchar(6) DEFAULT NULL COMMENT '日',\n" +
-                "  `gmt_create` timestamp NULL DEFAULT NULL,\n" +
-                "  `gmt_modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
-                "  `memo` varchar(255) DEFAULT NULL,\n" +
+                "  `phone` varchar(16) DEFAULT NULL,\n" +
+                "  `real_name` varchar(32) DEFAULT NULL,\n" +
+                "  `cert_no` varchar(26) DEFAULT NULL,\n" +
+                "  `created` timestamp NULL DEFAULT NULL,\n" +
+                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
+                "  `status` smallint(6) DEFAULT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户生日信息表';\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='实名投资过的用户列表';\n" +
                 "\n";
 
         //获取所有字段

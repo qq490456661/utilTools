@@ -29,7 +29,7 @@ public class Main {
         kepa.setName("аж©║╫э");
         redisCacheManager.set("flag",kepa);
 
-        Kepa temp = redisCacheManager.get("xx",Kepa.class);
+        Kepa temp = redisCacheManager.get("flag",Kepa.class);
         //Kepa temp = (Kepa)redisCacheManager.getObject("xx");
         System.out.println(temp);
         System.out.println(temp.getName());

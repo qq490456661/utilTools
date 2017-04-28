@@ -1,8 +1,7 @@
-/**
+package IpUtil; /**
  * onway.com Inc.
  * Copyright (c) 2016-2016 All Rights Reserved.
  */
-package ip°ïÖúÀà;
 
 /**
  * @author junjie.lin
