@@ -23,7 +23,8 @@ public class Main {
         System.out.println(jedis.get("name"));*/
 
         /** Jedis≤‚ ‘*/
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        /*RedisCacheManager redisCacheManager = new RedisCacheManager();*/
+        RedisClusterCacheManager redisCacheManager = new RedisClusterCacheManager();
         Kepa kepa = new Kepa();
         kepa.setCertNo("431024343445984999XXXpdpsappfpdf000WPPREOFODFDJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJK00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000888");
         kepa.setName("¡÷ø°Ω‹");

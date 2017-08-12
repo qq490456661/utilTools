@@ -1,8 +1,9 @@
 package redisUtil;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by linjunjie(490456661@qq.com) on 2017/2/26.
@@ -10,13 +11,13 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisUtil {
 
     //Redis服务器IP
-    private static String ADDR = "118.184.52.11";
+    private static String ADDR = "111.230.100.167";
 
     //Redis的端口号
-    private static int PORT = 19001;
+    private static int PORT = 7000;
 
     //访问密码
-    private static String AUTH = "qq@MAO152";
+    private static String AUTH = null;
 
     //可用连接实例的最大数目，默认值为8；
     //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
@@ -33,7 +34,11 @@ public class RedisUtil {
     //在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
     private static boolean TEST_ON_BORROW = true;
 
+    /** 非集群时用这个 **/
     private static JedisPool jedisPool = null;
+
+    /** 集群时使用这个 **/
+    private static JedisCluster jedisCluster = null;
 
     /**
      * 初始化Redis连接池
@@ -46,9 +51,26 @@ public class RedisUtil {
             config.setMaxWaitMillis(MAX_WAIT);
             config.setTestOnBorrow(TEST_ON_BORROW);
             jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
+
+            Set<HostAndPort> nodes = new LinkedHashSet<HostAndPort>();
+            nodes.add(new HostAndPort("111.230.100.167", 7000));
+            nodes.add(new HostAndPort("111.230.100.167", 7001));
+            nodes.add(new HostAndPort("111.230.100.167", 7002));
+            nodes.add(new HostAndPort("111.230.100.167", 6800));
+            nodes.add(new HostAndPort("111.230.100.167", 6801));
+            nodes.add(new HostAndPort("111.230.100.167", 6802));
+            nodes.add(new HostAndPort("111.230.100.167", 6900));
+            nodes.add(new HostAndPort("111.230.100.167", 6901));
+            nodes.add(new HostAndPort("111.230.100.167", 6902));
+            jedisCluster = new JedisCluster(nodes, config);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized  static JedisCluster getJedisCluster(){
+        return jedisCluster;
     }
 
     /**
@@ -78,5 +100,7 @@ public class RedisUtil {
             jedis.close();
         }
     }
+
+
 
 }
