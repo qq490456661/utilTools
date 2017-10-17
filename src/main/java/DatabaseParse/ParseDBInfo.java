@@ -11,17 +11,25 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `excel_invest_user` (\n" +
-                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
-                "  `user_id` varchar(32) DEFAULT NULL,\n" +
-                "  `phone` varchar(16) DEFAULT NULL,\n" +
-                "  `real_name` varchar(32) DEFAULT NULL,\n" +
-                "  `cert_no` varchar(26) DEFAULT NULL,\n" +
-                "  `created` timestamp NULL DEFAULT NULL,\n" +
-                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
-                "  `status` smallint(6) DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='实名投资过的用户列表';\n" +
+        String mytext = "CREATE TABLE `cif_bank_account` (\n" +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `user_id` varchar(32) DEFAULT NULL COMMENT '用户id',\n" +
+                "  `bank_username` varchar(32) DEFAULT NULL COMMENT '存管用户名(汇付天下)',\n" +
+                "  `bank_user_id` varchar(32) DEFAULT NULL COMMENT '存管用户userId',\n" +
+                "  `bank_mobile_no` varchar(32) DEFAULT NULL COMMENT '手机号码(存管账号)',\n" +
+                "  `certif_id` varchar(32) DEFAULT NULL COMMENT '身份证号码',\n" +
+                "  `email` varchar(32) DEFAULT NULL COMMENT '邮箱地址',\n" +
+                "  `city_id` varchar(32) DEFAULT NULL COMMENT '开户行地区代码',\n" +
+                "  `parent_bank_id` varchar(32) DEFAULT NULL COMMENT '开户行行别',\n" +
+                "  `bank_nm` varchar(32) DEFAULT NULL COMMENT '开户行支行名称',\n" +
+                "  `cap_acnt_no` varchar(32) DEFAULT NULL COMMENT '银行卡号',\n" +
+                "  `state` varchar(16) DEFAULT NULL COMMENT '账号状态',\n" +
+                "  `gmt_created` timestamp NULL DEFAULT NULL,\n" +
+                "  `gmt_modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
+                "  `memo` varchar(255) DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`id`),\n" +
+                "  UNIQUE KEY `USER_ID` (`user_id`) USING BTREE\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n" +
                 "\n";
 
         //获取所有字段
