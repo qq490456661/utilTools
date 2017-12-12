@@ -38,7 +38,6 @@ public class HttpConnectionManager {
             .setSoTimeout(5000).build();
     /** 重新尝试次数*/
     private static HttpRequestRetryHandler httpRequestRetryHandler = new HttpRequestRetryHandler() {
-        @Override
         public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
                 if(executionCount < retryMaxCount)
                     return true;

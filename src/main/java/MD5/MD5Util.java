@@ -127,9 +127,9 @@ public class MD5Util {
     }
 
     public static void main(String[] args){
-        String data = "linjunjie";
+        String data = "1510376673";
         System.out.println("MD5:"+toHexString(encodeByMD5(data.getBytes())));
-        System.out.println("HmacMD5:"+toHexString(encodeByHmacMD5(data.getBytes(),"shen")));
+        System.out.println("HmacMD5:"+toHexString(encodeByHmacMD5(data.getBytes(),"qq@MAO360#zzz%%%#")));
         System.out.println("SHA:"+toHexString(encodeBySHA(data.getBytes())));
 
     }

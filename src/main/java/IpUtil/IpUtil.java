@@ -3,6 +3,9 @@ package IpUtil; /**
  * Copyright (c) 2016-2016 All Rights Reserved.
  */
 
+import java.math.BigDecimal;
+import java.util.Random;
+
 /**
  * @author junjie.lin
  * @version $Id: IpUtil.java, v 0.1 2016/8/23 15:57 junjie.lin Exp $
@@ -10,15 +13,38 @@ package IpUtil; /**
 public class IpUtil {
 
     public static void main(String[] args) {
-        String ip = "103.41.132.34";
+//        String ip = "103.41.132.34";
+//
+//        long iplong = ipConvertToInt(ip);
+//        String ipAddress = intToConvertToIp(iplong);
+//        System.out.println(ipAddress);
+//        System.out.println(intToConvertToIp(2130706433));
+//
+//
+//        System.out.println("1.1.4".compareTo("1.1.5"));
+        double min = 0.1d;
+        double max = 10d;
+        double sum = 100D;
+        int count = 50;
 
-        long iplong = ipConvertToInt(ip);
-        String ipAddress = intToConvertToIp(iplong);
-        System.out.println(ipAddress);
-        System.out.println(intToConvertToIp(2130706433));
+        BigDecimal resultSum = new BigDecimal(0);
+        Random r = new Random();
+        int shengyu = 49;
+        for(int i= 0;i<count ; i++){
+            //System.out.println("shengyu="+shengyu);
+            double ro = (r.nextDouble() * (max - min - (shengyu * min)) + min) * 100;
+            //System.out.println("ro= "+ro);
+            double a = Math.round(ro) * 1.0 /100;
+            sum -= a;
+            if(sum < max){
+                max = sum;
+            }
+            System.out.println("Éú³ÉµÄa="+a);
+            resultSum = resultSum.add(new BigDecimal(a+""));
+            shengyu --;
+        }
+        System.out.println("resultSum = "+resultSum);
 
-
-        System.out.println("1.1.4".compareTo("1.1.5"));
     }
 
 
