@@ -4,12 +4,7 @@
  */
 package MD5;
 
-
-
-
-
 import org.bouncycastle.util.encoders.Base64;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -30,15 +25,6 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class RsaUtil {
 
-    public static final String KEY_ALGORITHM = "RSA";
-    /** 貌似默认是RSA/NONE/PKCS1Padding，未验证 */
-    public static final String CIPHER_ALGORITHM = "RSA/ECB/PKCS1Padding";
-    public static final String PUBLIC_KEY = "publicKey";
-    public static final String PRIVATE_KEY = "privateKey";
-
-    /** RSA密钥长度必须是64的倍数，在512~65536之间。默认是1024 */
-    public static final int KEY_SIZE = 1024;
-
 
     public static String data="hello world";
 
@@ -52,6 +38,7 @@ public class RsaUtil {
 
         byte[] encryByte = encrypt(rsaPublicKey,data.getBytes());
         String str = org.apache.commons.codec.binary.Base64.encodeBase64String(encryByte);
+        //前端加密后的密码
         System.out.println(str);
 
 //        String privateKeyStr = loadPrivateKeyByFile("D:\\360Downloads\\secret_key_tools_RSA_win\\RSA\\rsa_private_key_pkcs8.pem");
@@ -72,7 +59,7 @@ public class RsaUtil {
                 "lA1giukHAY/G";
         RSAPrivateKey rsaPrivateKey = loadPrivateKeyByStr(privateKeyStr);
 
-        //加密的密码
+        //从H5前端传输过来的密码
         String encryPassword = "VECmRb5pNbp6YWKEBHPHgFUpRiZOgi5+g0P4pT5lJAmi5l1GOa5+DzrnIMDH4BeH1RjsxPhj837KkpQloTBAksJxBC2r3LIUcH5rj1txPfGaVDlI88gwIu+/gaIv9W7La+nKvB0jI3YKlaXbDkhBQU+edPJ7AEnFytnZdKLdeg8=";
 
         byte[] decryPassByte = decrypt(rsaPrivateKey, org.apache.commons.codec.binary.Base64.decodeBase64(encryPassword));
@@ -224,6 +211,44 @@ public class RsaUtil {
             throw new Exception("私钥数据读取错误");
         } catch (NullPointerException e) {
             throw new Exception("私钥输入流为空");
+        }
+    }
+
+    /**
+     * 公钥解密过程
+     *
+     * @param publicKey
+     *            公钥
+     * @param cipherData
+     *            密文数据
+     * @return 明文
+     * @throws Exception
+     *             解密过程中的异常信息
+     */
+    public static byte[] decrypt(RSAPublicKey publicKey, byte[] cipherData)
+            throws Exception {
+        if (publicKey == null) {
+            throw new Exception("解密公钥为空, 请设置");
+        }
+        Cipher cipher = null;
+        try {
+            // 使用默认RSA
+            cipher = Cipher.getInstance("RSA");
+            // cipher= Cipher.getInstance("RSA", new BouncyCastleProvider());
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            byte[] output = cipher.doFinal(cipherData);
+            return output;
+        } catch (NoSuchAlgorithmException e) {
+            throw new Exception("无此解密算法");
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InvalidKeyException e) {
+            throw new Exception("解密公钥非法,请检查");
+        } catch (IllegalBlockSizeException e) {
+            throw new Exception("密文长度非法");
+        } catch (BadPaddingException e) {
+            throw new Exception("密文数据已损坏");
         }
     }
 
