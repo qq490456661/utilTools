@@ -35,7 +35,7 @@ public class StringUtil {
     }
 
     /**
-     * é˜²æ­¢xssæ”»å‡»
+     * ·ÀÖ¹xss¹¥»÷
      * @param content
      * @return
      */
@@ -47,7 +47,7 @@ public class StringUtil {
     }
 
     /**
-     * è¿‡æ»¤æŽ‰æ‰€æœ‰htmlæ ‡è®°
+     * ¹ýÂËµôËùÓÐhtml±ê¼Ç
      * @param content
      * @return
      */
@@ -57,7 +57,7 @@ public class StringUtil {
     }
 
     /**
-     * è¿‡æ»¤æ•´ä¸ªç±»
+     * ¹ýÂËÕû¸öÀà
      * @param obj
      */
     public static void objFilter(Object obj){
@@ -80,7 +80,7 @@ public class StringUtil {
 
     public static void main(String []args){
         /*TrainingInformationUpdateRequest request = new TrainingInformationUpdateRequest();
-        request.setAddressDetail("<script> hello å¤§å®¶å¥½å•Š </script>  <img src='' /> ww");
+        request.setAddressDetail("<script> hello ´ó¼ÒºÃ°¡ </script>  <img src='' /> ww");
         objFilter(request);
         System.out.println(request.getAddressDetail());*/
     }

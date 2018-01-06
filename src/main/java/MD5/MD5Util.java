@@ -22,7 +22,7 @@ public class MD5Util {
     public static final String KEY_HMAC_MD5="HmacMD5";
 
     /**
-     * MD5åŠ å¯†  (ä¸€å®šè¦ä»¥UTF-8è·å–getByte("UTF-8"))
+     * MD5¼ÓÃÜ  (Ò»¶¨ÒªÒÔUTF-8»ñÈ¡getByte("UTF-8"))
      * @param data
      * @return
      */
@@ -60,10 +60,10 @@ public class MD5Util {
     }
 
     /**
-     * HmacMD5åŠ å¯†
-     * @param data å¾…åŠ å¯†çš„æ˜æ–‡
-     * @param secretKey å¯†é’¥
-     * @return å¯†æ–‡
+     * HmacMD5¼ÓÃÜ
+     * @param data ´ı¼ÓÃÜµÄÃ÷ÎÄ
+     * @param secretKey ÃÜÔ¿
+     * @return ÃÜÎÄ
      */
     public static byte[] encodeByHmacMD5(byte[] data,String secretKey){
         try {
@@ -78,7 +78,7 @@ public class MD5Util {
     }
 
     /**
-     * SHAåŠ å¯†
+     * SHA¼ÓÃÜ
      * @param data
      * @return
      */
@@ -94,7 +94,7 @@ public class MD5Util {
     }
 
     /**
-     * SHA1åŠ å¯†
+     * SHA1¼ÓÃÜ
      * @param data
      * @return
      */
@@ -111,7 +111,7 @@ public class MD5Util {
     }
 
     /**
-     * è½¬æ¢ä¸ºåå…­è¿›åˆ¶
+     * ×ª»»ÎªÊ®Áù½øÖÆ
      * @param data
      * @return
      */

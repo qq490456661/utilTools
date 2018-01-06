@@ -20,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * HttpClientè¿æ¥æ± ç®¡ç†ç±»
+ * HttpClientÁ¬½Ó³Ø¹ÜÀíÀà
  * Created by linjunjie(490456661@qq.com) on 2017/1/8.
  */
 public class HttpConnectionManager {
@@ -36,7 +36,7 @@ public class HttpConnectionManager {
 
     private static SocketConfig socketConfig = SocketConfig.custom()
             .setSoTimeout(5000).build();
-    /** é‡æ–°å°è¯•æ¬¡æ•°*/
+    /** ÖØĞÂ³¢ÊÔ´ÎÊı*/
     private static HttpRequestRetryHandler httpRequestRetryHandler = new HttpRequestRetryHandler() {
         public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
                 if(executionCount < retryMaxCount)
@@ -59,8 +59,8 @@ public class HttpConnectionManager {
                 .register("http", new PlainConnectionSocketFactory())
                 .build();
         cm = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-        cm.setMaxTotal(50);//æœ€å¤§è¿æ¥æ•°
-        cm.setDefaultMaxPerRoute(2);//å¯¹æ¯ä¸ªç½‘ç«™æœ€å¤§æ˜¯2è¿æ¥æ•°
+        cm.setMaxTotal(50);//×î´óÁ¬½ÓÊı
+        cm.setDefaultMaxPerRoute(2);//¶ÔÃ¿¸öÍøÕ¾×î´óÊÇ2Á¬½ÓÊı
 
     }
 
@@ -72,7 +72,7 @@ public class HttpConnectionManager {
                 .setRetryHandler(httpRequestRetryHandler)
                 .build();
 
-        /*CloseableHttpClient httpClient = HttpClients.createDefault();//å¦‚æœä¸é‡‡ç”¨è¿æ¥æ± å°±æ˜¯è¿™ç§æ–¹å¼è·å–è¿æ¥*/
+        /*CloseableHttpClient httpClient = HttpClients.createDefault();//Èç¹û²»²ÉÓÃÁ¬½Ó³Ø¾ÍÊÇÕâÖÖ·½Ê½»ñÈ¡Á¬½Ó*/
         return httpClient;
     }
 

@@ -22,6 +22,20 @@
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/bouncycastle/bcmail-jdk16 -->
+        <dependency>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcmail-jdk16</artifactId>
+            <version>140</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
+
 
 
         <dependency>
