@@ -22,6 +22,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/bouncycastle/bcmail-jdk16 -->
         <dependency>
             <groupId>bouncycastle</groupId>

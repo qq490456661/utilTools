@@ -11,20 +11,19 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
         //待解析的数据库表
-        String mytext = "CREATE TABLE `user_contract_log` (\n" +
-                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+        String mytext = "CREATE TABLE `shop_user` (\n" +
+                "  `id` int(11) NOT NULL,\n" +
                 "  `user_id` varchar(32) DEFAULT NULL,\n" +
-                "  `invest_no` varchar(32) DEFAULT NULL COMMENT '订单号',\n" +
-                "  `contract_no` varchar(32) DEFAULT NULL COMMENT '生成的合同号',\n" +
-                "  `cer` int(11) DEFAULT NULL COMMENT '是否使用存证  1存证服务  0不存证',\n" +
-                "  `sign` varchar(16) DEFAULT NULL COMMENT '是否签署成功 SUCCESS  ',\n" +
-                "  `callback` varchar(16) DEFAULT NULL COMMENT '是否回调成功 SUCCESS',\n" +
+                "  `cell` varchar(16) DEFAULT NULL COMMENT '手机号',\n" +
+                "  `user_name` varchar(32) DEFAULT NULL COMMENT '昵称',\n" +
+                "  `real_name` varchar(32) DEFAULT NULL COMMENT '姓名',\n" +
+                "  `cert_no` varchar(32) DEFAULT NULL COMMENT '身份证',\n" +
+                "  `open_id` varchar(64) DEFAULT NULL,\n" +
                 "  `gmt_create` timestamp NULL DEFAULT NULL,\n" +
                 "  `gmt_modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
                 "  `memo` varchar(255) DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`id`),\n" +
-                "  KEY `IDX_CONTRACT_NO` (`contract_no`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生成合同的日志（云合同）';\n" +
+                "  PRIMARY KEY (`id`)\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户会员表';\n" +
                 "\n";
 
         //获取所有字段
