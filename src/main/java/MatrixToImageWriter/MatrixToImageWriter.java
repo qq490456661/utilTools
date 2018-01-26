@@ -19,52 +19,20 @@ import java.util.Hashtable;
  */
 public class MatrixToImageWriter {
 
-    private static final int BLACK = 0xFF000000;
-    private static final int WHITE = 0xFFFFFFFF;
-
     private MatrixToImageWriter() {
     }
 
-    public static BufferedImage toBufferedImage(BitMatrix matrix) {
-        int width = matrix.getWidth();
-        int height = matrix.getHeight();
-        BufferedImage image = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_RGB);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                image.setRGB(x, y, matrix.get(x, y) ? BLACK : WHITE);
-            }
-        }
-        return image;
-    }
-
-    public static void writeToFile(BitMatrix matrix, String format, File file)
-            throws IOException {
-        BufferedImage image = toBufferedImage(matrix);
-        if (!ImageIO.write(image, format, file)) {
-            throw new IOException("Could not write an image of format "
-                    + format + " to " + file);
-        }
-    }
-
-    public static void writeToStream(BitMatrix matrix, String format,
-                                     OutputStream stream) throws IOException {
-        BufferedImage image = toBufferedImage(matrix);
-        if (!ImageIO.write(image, format, stream)) {
-            throw new IOException("Could not write an image of format " + format);
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         int imageWidth = 0;
         int imageHeight = 0;
         int headWidth = 135;
         int headHeight = 135;
-        String msg = "ÒÔ×ÔÎÒ¹þ¹þ¹þ¹þ¹þ¹þß´ß´ß´ÄäÃûÎûÎûÎû¶þ¶þ";
+        String msg = "ÒÔ×ÔÎÒ¹þ¹þ¹þ¹þ¹þ¹þß´ß´ß´ÄäÃûÎûÎûÎû¶þ¶þß´ß´ÄäÃûÎûÎûÎû¶þ";
         int row = msg.length()/10;
 
         //¶ÁÈ¡±³¾°Í¼Æ¬,ÉèÖÃ±³¾°
-        BufferedImage image = ImageIO.read(new File("D://wx2.jpg"));
+        BufferedImage image = ImageIO.read(new File("D:\\Ð¡³ÌÐò¿ª·¢\\Â¼ÒôÉÏ´«ÏÂÔØ\\record\\images\\forward.png"));
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();
 
@@ -100,10 +68,7 @@ public class MatrixToImageWriter {
         }
 
         //ÉèÖÃ¶þÎ¬ÂëÔÚ±³¾°Í¼Æ¬ÉÏ
-
-
-
-        ImageIO.write(image, "JPG",new FileOutputStream("D://1.jpg"));
+        ImageIO.write(image, "png",new FileOutputStream("D://1.png"));
     }
 
 }
