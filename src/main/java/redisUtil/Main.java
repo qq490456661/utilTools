@@ -24,16 +24,21 @@ public class Main {
 
         /** Jedis≤‚ ‘*/
         RedisCacheManager redisCacheManager = new RedisCacheManager();
-        Kepa kepa = new Kepa();
-        kepa.setCertNo("431024343445984999XXXpdpsappfpdf000WPPREOFODFDJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJK00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000888");
-        kepa.setName("¡÷ø°Ω‹");
-        redisCacheManager.set("flag",kepa);
-
-        Kepa temp = redisCacheManager.get("flag",Kepa.class);
-        //Kepa temp = (Kepa)redisCacheManager.getObject("xx");
-        System.out.println(temp);
-        System.out.println(temp.getName());
-        System.out.println(temp.getCertNo());
-
+//        Kepa kepa = new Kepa();
+//        kepa.setCertNo("bfg");
+//        kepa.setName("¡÷ø°Ω‹");
+//        redisCacheManager.set("flag",kepa);
+//        Kepa temp = redisCacheManager.get("flag",Kepa.class);
+//        Kepa temp = (Kepa)redisCacheManager.getObject("xx");
+//        System.out.println(temp);
+//        System.out.println(temp.getName());
+//        System.out.println(temp.getCertNo());
+//        redisCacheManager.set("lin","haole");
+//        String result = redisCacheManager.getString("lin");
+//        System.out.println(result);
+        Jedis jedis = RedisUtil.getJedis();
+        jedis.set("lin","henhao");
+        String result = jedis.get("lin");
+        System.out.println(result);
     }
 }

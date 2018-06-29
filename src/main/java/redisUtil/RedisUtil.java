@@ -1,5 +1,6 @@
 package redisUtil;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.*;
 
 import java.util.LinkedHashSet;
@@ -10,38 +11,38 @@ import java.util.Set;
  */
 public class RedisUtil {
 
-    //Redis·þÎñÆ÷IP
-    private static String ADDR = "111.230.100.167";
+    //Redisï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IP
+    private static String ADDR = "118.178.135.106";
 
-    //RedisµÄ¶Ë¿ÚºÅ
+    //Redisï¿½Ä¶Ë¿Úºï¿½
     private static int PORT = 7000;
 
-    //·ÃÎÊÃÜÂë
-    private static String AUTH = null;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private static String AUTH = "qweasdzxc";
 
-    //¿ÉÓÃÁ¬½ÓÊµÀýµÄ×î´óÊýÄ¿£¬Ä¬ÈÏÖµÎª8£»
-    //Èç¹û¸³ÖµÎª-1£¬Ôò±íÊ¾²»ÏÞÖÆ£»Èç¹ûpoolÒÑ¾­·ÖÅäÁËmaxActive¸öjedisÊµÀý£¬Ôò´ËÊ±poolµÄ×´Ì¬Îªexhausted(ºÄ¾¡)¡£
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ä¬ï¿½ï¿½ÖµÎª8ï¿½ï¿½
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÎª-1ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½poolï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½maxActiveï¿½ï¿½jedisÊµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±poolï¿½ï¿½×´Ì¬Îªexhausted(ï¿½Ä¾ï¿½)ï¿½ï¿½
     private static int MAX_ACTIVE = 1024;
 
-    //¿ØÖÆÒ»¸öpool×î¶àÓÐ¶àÉÙ¸ö×´Ì¬Îªidle(¿ÕÏÐµÄ)µÄjedisÊµÀý£¬Ä¬ÈÏÖµÒ²ÊÇ8¡£
+    //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½poolï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ù¸ï¿½×´Ì¬Îªidle(ï¿½ï¿½ï¿½Ðµï¿½)ï¿½ï¿½jedisÊµï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½ÖµÒ²ï¿½ï¿½8ï¿½ï¿½
     private static int MAX_IDLE = 200;
 
-    //µÈ´ý¿ÉÓÃÁ¬½ÓµÄ×î´óÊ±¼ä£¬µ¥Î»ºÁÃë£¬Ä¬ÈÏÖµÎª-1£¬±íÊ¾ÓÀ²»³¬Ê±¡£Èç¹û³¬¹ýµÈ´ýÊ±¼ä£¬ÔòÖ±½ÓÅ×³öJedisConnectionException£»
+    //ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½Î»ï¿½ï¿½ï¿½ë£¬Ä¬ï¿½ï¿½ÖµÎª-1ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½Ê±ï¿½ä£¬ï¿½ï¿½Ö±ï¿½ï¿½ï¿½×³ï¿½JedisConnectionExceptionï¿½ï¿½
     private static int MAX_WAIT = 10000;
 
-    private static int TIMEOUT = 10000;
+    private static int TIMEOUT = 3000;
 
-    //ÔÚborrowÒ»¸öjedisÊµÀýÊ±£¬ÊÇ·ñÌáÇ°½øÐÐvalidate²Ù×÷£»Èç¹ûÎªtrue£¬ÔòµÃµ½µÄjedisÊµÀý¾ùÊÇ¿ÉÓÃµÄ£»
+    //ï¿½ï¿½borrowÒ»ï¿½ï¿½jedisÊµï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½validateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªtrueï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½jedisÊµï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ÃµÄ£ï¿½
     private static boolean TEST_ON_BORROW = true;
 
-    /** ·Ç¼¯ÈºÊ±ÓÃÕâ¸ö **/
+    /** ï¿½Ç¼ï¿½ÈºÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ **/
     private static JedisPool jedisPool = null;
 
-    /** ¼¯ÈºÊ±Ê¹ÓÃÕâ¸ö **/
+    /** ï¿½ï¿½ÈºÊ±Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ **/
     private static JedisCluster jedisCluster = null;
 
     /**
-     * ³õÊ¼»¯RedisÁ¬½Ó³Ø
+     * ï¿½ï¿½Ê¼ï¿½ï¿½Redisï¿½ï¿½ï¿½Ó³ï¿½
      */
     static {
         try {
@@ -50,19 +51,17 @@ public class RedisUtil {
             config.setMaxIdle(MAX_IDLE);
             config.setMaxWaitMillis(MAX_WAIT);
             config.setTestOnBorrow(TEST_ON_BORROW);
-            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
 
+            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
+            String host = ADDR;
             Set<HostAndPort> nodes = new LinkedHashSet<HostAndPort>();
-            nodes.add(new HostAndPort("111.230.100.167", 7000));
-            nodes.add(new HostAndPort("111.230.100.167", 7001));
-            nodes.add(new HostAndPort("111.230.100.167", 7002));
-            nodes.add(new HostAndPort("111.230.100.167", 6800));
-            nodes.add(new HostAndPort("111.230.100.167", 6801));
-            nodes.add(new HostAndPort("111.230.100.167", 6802));
-            nodes.add(new HostAndPort("111.230.100.167", 6900));
-            nodes.add(new HostAndPort("111.230.100.167", 6901));
-            nodes.add(new HostAndPort("111.230.100.167", 6902));
-            jedisCluster = new JedisCluster(nodes, config);
+            nodes.add(new HostAndPort(host, 7000));
+            nodes.add(new HostAndPort(host, 7001));
+            nodes.add(new HostAndPort(host, 7002));
+            nodes.add(new HostAndPort(host, 7003));
+            nodes.add(new HostAndPort(host, 7004));
+            nodes.add(new HostAndPort(host, 7005));
+            jedisCluster = new JedisCluster(nodes,3000,3000,5,AUTH,config);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +73,7 @@ public class RedisUtil {
     }
 
     /**
-     * »ñÈ¡JedisÊµÀý
+     * ï¿½ï¿½È¡JedisÊµï¿½ï¿½
      * @return
      */
     public synchronized static Jedis getJedis() {
@@ -92,7 +91,7 @@ public class RedisUtil {
     }
 
     /**
-     * ÊÍ·Åjedis×ÊÔ´
+     * ï¿½Í·ï¿½jedisï¿½ï¿½Ô´
      * @param jedis
      */
     public static void returnResource(final Jedis jedis) {

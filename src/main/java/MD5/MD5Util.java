@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -126,13 +127,19 @@ public class MD5Util {
         return hex.toString();
     }
 
-    public static void main(String[] args){
-        String data = "1510376673";
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        String data = "123456789";
+        byte[] bytes = encodeByMD5(data.getBytes("UTF-8"));
+        for(int i=0;i<bytes.length;i++){
+            System.out.print(bytes[i]+" ");
+        }
         System.out.println("MD5:"+toHexString(encodeByMD5(data.getBytes())));
         System.out.println("HmacMD5:"+toHexString(encodeByHmacMD5(data.getBytes(),"qq@MAO360#zzz%%%#")));
         System.out.println("SHA:"+toHexString(encodeBySHA(data.getBytes())));
 
     }
+
+
 
 
 

@@ -1,5 +1,6 @@
 package redisUtil;
 
+import com.alibaba.fastjson.JSONObject;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -51,7 +52,7 @@ public class RedisCacheManager implements CacheManager{
         Jedis jedis = null;
         try {
             jedis = RedisUtil.getJedis();
-            if ("OK".equalsIgnoreCase(jedis.set(key.getBytes(), SerializeUtil.serialize(value)))) {
+            if ("OK".equalsIgnoreCase(jedis.set(key, JSONObject.toJSONString(value)))) {
                 return true;
             }
         }catch(Exception e){
@@ -98,7 +99,7 @@ public class RedisCacheManager implements CacheManager{
         Jedis jedis = null;
         try {
             jedis = RedisUtil.getJedis();
-            return SerializeUtil.unserialize(jedis.get(key.getBytes()));
+            return JSONObject.parseObject(jedis.get(key));
         }catch (Exception e){
             e.printStackTrace();
         }finally {

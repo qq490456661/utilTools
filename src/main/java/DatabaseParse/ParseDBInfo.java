@@ -10,20 +10,35 @@ public class ParseDBInfo {
 
 
     public static void main(String[] args) {
+
+        String s1 = new StringBuilder("计算机").append("软件").toString();
+        System.out.println(s1.intern() == s1);
+
+        String s2 = new StringBuilder("ja").append("va").toString();
+        System.out.println(s2.intern() == s2);
+
         //待解析的数据库表
-        String mytext = "CREATE TABLE `shop_user` (\n" +
-                "  `id` int(11) NOT NULL,\n" +
+        String mytext = "CREATE TABLE `ord_fund_repay_invest_extra` (\n" +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `invest_no` varchar(32) DEFAULT NULL,\n" +
+                "  `fund_code` varchar(32) DEFAULT NULL,\n" +
+                "  `prod_name` varchar(64) DEFAULT NULL,\n" +
                 "  `user_id` varchar(32) DEFAULT NULL,\n" +
-                "  `cell` varchar(16) DEFAULT NULL COMMENT '手机号',\n" +
-                "  `user_name` varchar(32) DEFAULT NULL COMMENT '昵称',\n" +
-                "  `real_name` varchar(32) DEFAULT NULL COMMENT '姓名',\n" +
-                "  `cert_no` varchar(32) DEFAULT NULL COMMENT '身份证',\n" +
-                "  `open_id` varchar(64) DEFAULT NULL,\n" +
+                "  `coupon_add_amount` decimal(24,4) DEFAULT NULL COMMENT '加息券加息金额',\n" +
+                "  `coupon_add_desc` varchar(64) DEFAULT NULL COMMENT '加息券描述（5%加息券）',\n" +
+                "  `extra_add_amount` decimal(24,4) DEFAULT NULL COMMENT '额外加息金额',\n" +
+                "  `extra_add_desc` varchar(64) DEFAULT NULL COMMENT '额外加息描述（2%）',\n" +
+                "  `cash_occupy_amount` decimal(24,4) DEFAULT NULL COMMENT '资金占用费',\n" +
+                "  `cash_occupy_desc` varchar(64) DEFAULT NULL COMMENT '资金占用费天数（1天）',\n" +
+                "  `repurchase_add_amount` decimal(24,4) DEFAULT NULL COMMENT '复投加息金额',\n" +
+                "  `repurchase_add_desc` varchar(64) DEFAULT NULL COMMENT '复投加息百分比描述',\n" +
+                "  `deduction_bonus_amount` decimal(24,4) DEFAULT NULL COMMENT '抵扣红包金额',\n" +
+                "  `deduction_bonus_desc` varchar(64) DEFAULT NULL COMMENT '抵扣红包描述',\n" +
                 "  `gmt_create` timestamp NULL DEFAULT NULL,\n" +
                 "  `gmt_modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
                 "  `memo` varchar(255) DEFAULT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户会员表';\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='回款额外收益';\n" +
                 "\n";
 
         //获取所有字段
@@ -38,6 +53,8 @@ public class ParseDBInfo {
         System.out.println(getFirstUppercase(result));
         //#status#
         System.out.println(getJin(result));
+        //#{status}
+        System.out.println(getJinMybatis(result));
         //a.status = #status#
         System.out.println(getFieldsEqualsJin(result));
         //private String xxx;
@@ -228,6 +245,37 @@ public class ParseDBInfo {
                 sbchar.append(item);
             }
             sbchar.append("#,");
+        }
+
+        return sbchar.substring(0,sbchar.length()-1).toString();
+    }
+
+    //获得有#{}号的
+    public static String getJinMybatis(String result){
+        String[] strs = result.split(",");
+        char[] chars = null;
+        StringBuilder sbchar = new StringBuilder();
+        int flag = 0;
+        for(String item : strs){
+            chars = item.toCharArray();
+            sbchar.append("#{");
+            if(item.indexOf("_") != -1){
+                for(char c : chars){
+                    if(c == '_'){
+                        flag = 1;
+                    }else{
+                        if(flag == 1){
+                            flag = 0;
+                            sbchar.append(Character.toUpperCase(c));
+                        }else{
+                            sbchar.append(c);
+                        }
+                    }
+                }
+            }else{
+                sbchar.append(item);
+            }
+            sbchar.append("},");
         }
 
         return sbchar.substring(0,sbchar.length()-1).toString();
