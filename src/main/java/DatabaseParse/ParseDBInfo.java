@@ -1,5 +1,11 @@
 package DatabaseParse;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,55 +17,82 @@ public class ParseDBInfo {
 
     public static void main(String[] args) {
 
-        String s1 = new StringBuilder("计算机").append("软件").toString();
-        System.out.println(s1.intern() == s1);
-
-        String s2 = new StringBuilder("ja").append("va").toString();
-        System.out.println(s2.intern() == s2);
-
         //待解析的数据库表
-        String mytext = "CREATE TABLE `ord_fund_repay_invest_extra` (\n" +
-                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
-                "  `invest_no` varchar(32) DEFAULT NULL,\n" +
-                "  `fund_code` varchar(32) DEFAULT NULL,\n" +
-                "  `prod_name` varchar(64) DEFAULT NULL,\n" +
-                "  `user_id` varchar(32) DEFAULT NULL,\n" +
-                "  `coupon_add_amount` decimal(24,4) DEFAULT NULL COMMENT '加息券加息金额',\n" +
-                "  `coupon_add_desc` varchar(64) DEFAULT NULL COMMENT '加息券描述（5%加息券）',\n" +
-                "  `extra_add_amount` decimal(24,4) DEFAULT NULL COMMENT '额外加息金额',\n" +
-                "  `extra_add_desc` varchar(64) DEFAULT NULL COMMENT '额外加息描述（2%）',\n" +
-                "  `cash_occupy_amount` decimal(24,4) DEFAULT NULL COMMENT '资金占用费',\n" +
-                "  `cash_occupy_desc` varchar(64) DEFAULT NULL COMMENT '资金占用费天数（1天）',\n" +
-                "  `repurchase_add_amount` decimal(24,4) DEFAULT NULL COMMENT '复投加息金额',\n" +
-                "  `repurchase_add_desc` varchar(64) DEFAULT NULL COMMENT '复投加息百分比描述',\n" +
-                "  `deduction_bonus_amount` decimal(24,4) DEFAULT NULL COMMENT '抵扣红包金额',\n" +
-                "  `deduction_bonus_desc` varchar(64) DEFAULT NULL COMMENT '抵扣红包描述',\n" +
-                "  `gmt_create` timestamp NULL DEFAULT NULL,\n" +
-                "  `gmt_modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
-                "  `memo` varchar(255) DEFAULT NULL,\n" +
+        String mytext = "CREATE TABLE `stat_role` (\n" +
+                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
+                "  `name` varchar(64) DEFAULT NULL COMMENT '角色名',\n" +
+                "  `created` timestamp NULL DEFAULT NULL,\n" +
+                "  `modified` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,\n" +
+                "  `status` smallint(6) DEFAULT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='回款额外收益';\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='角色';\n" +
                 "\n";
 
         //获取所有字段
-        String result = init(mytext);
+        TableModel tableModel = init(mytext);
+        String result = tableModel.getOtherFields();
+        System.out.println("==="+result);
 
-        System.out.println(result);
+        tableModel.setCommonFields(result);
         // 获取 as 取别名 other_id as otherId
-        System.out.println(getAs(result));
+        tableModel.setAs(getAs(result));
         //a.status
-        System.out.println(getAAs(result));
+        tableModel.setADianAs(getAAs(result));
         //status
-        System.out.println(getFirstUppercase(result));
+        tableModel.setFirstUppercase(getFirstUppercase(result));
         //#status#
-        System.out.println(getJin(result));
+        tableModel.setJing(getJing(result));
         //#{status}
-        System.out.println(getJinMybatis(result));
+        tableModel.setJingMybatis(getJingMybatis(result));
         //a.status = #status#
-        System.out.println(getFieldsEqualsJin(result));
+        tableModel.setFieldsEqualsJing(getFieldsEqualsJing(result));
         //private String xxx;
         System.out.println(getMemberProperties(result));
 
+        buildIbatisMysqlXml(tableModel);
+    }
+
+    /** 生成mysql的ibatisXml文件 **/
+    //freemarker
+    public static void buildIbatisMysqlXml(TableModel tableModel){
+        String TEMPLATE_PATH = "D://XSBDownload";//模板位置
+        String TEMPLATE_NAME= "ibatis_template.xml";//模板名字
+        String OUTPUT_PATH= "D://XSBDownload//";//生成地址
+        String pojoClassPath = "com.onway.model.pojo";
+
+        Configuration configuration = new Configuration();
+        Writer out = null;
+        try {
+            // step2 获取模版路径
+            configuration.setDirectoryForTemplateLoading(new File(TEMPLATE_PATH));
+            // step3 创建数据模型
+            Map<String, Object> dataMap = new HashMap<String, Object>();
+            dataMap.put("namespace", tableModel.getTableName());
+            dataMap.put("tableName", tableModel.getTableName());
+            dataMap.put("pojoName", tableModel.getPojoName());
+            dataMap.put("pojoClassPath", pojoClassPath+"."+tableModel.getPojoName());
+            dataMap.put("fieldsAs", tableModel.getAs());
+            dataMap.put("insertFieldKey", tableModel.getCommonFields());
+            dataMap.put("insertFieldValue", tableModel.getJing());
+            // step4 加载模版文件
+            Template template = configuration.getTemplate(TEMPLATE_NAME,"UTF-8");
+            // step5 生成数据
+            File docFile = new File(OUTPUT_PATH+"AutoCodeDemo.xml");
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile),"UTF-8"));
+            // step6 输出文件
+            template.process(dataMap, out);
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^xml 文件创建成功 !");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != out) {
+                    out.flush();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
 
     }
 
@@ -68,11 +101,12 @@ public class ParseDBInfo {
      * @param mytext
      * @return
      */
-    public static String init(String mytext){
+    public static TableModel init(String mytext){
         int index = -1;
         //由于KEY字段是最后面的索引内容，可以删除掉
         mytext = mytext.substring(0,(index = mytext.indexOf(" KEY ")) == -1 ? mytext.length() : index);
-
+        //删除(前的内容
+//        mytext = mytext.substring(mytext.indexOf("("));
         Pattern pattern = Pattern.compile("(`.*`)*");
         Matcher matcher = pattern.matcher(mytext);
 
@@ -88,7 +122,14 @@ public class ParseDBInfo {
         }
         String result = str.toString().replaceAll("``",",");
         result = result.replaceAll("`","");
-        return result;
+        String tableName = result.substring(0,result.indexOf(","));
+        //封装返回结果
+        TableModel tableModel = new TableModel();
+        tableModel.setTableName(tableName);
+        tableModel.setPojoName(toTuoFengName(tableName,true)+"Pojo");
+        result = result.substring(result.indexOf(",")+1);
+        tableModel.setOtherFields(result);
+        return tableModel;
     }
 
     /**
@@ -96,28 +137,14 @@ public class ParseDBInfo {
      * @param result
      * @return
      */
-    public static String getFieldsEqualsJin(String result){
+    public static String getFieldsEqualsJing(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
-        int flag = 0;
         for(String item : strs){
-            chars = item.toCharArray();
             sbchar.append("a.").append(item);
             if(item.indexOf("_") != -1){
                 sbchar.append(" = #");
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
                 sbchar.append("#");
             }else{
                 sbchar.append(" = #")
@@ -133,114 +160,82 @@ public class ParseDBInfo {
     //person,user_id as userId,other_id as otherId,created,modified,status
     public static String getAs(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
-        int flag = 0;
         for(String item : strs){
-            chars = item.toCharArray();
             sbchar.append(item);
             if(item.indexOf("_") != -1){
                 sbchar.append(" as ");
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
             }
             sbchar.append(",");
         }
-
         return sbchar.substring(0,sbchar.length()-1).toString();
+    }
+
+    //驼峰命名法
+    public static String toTuoFengName(String item,boolean firstUp){
+        //firstUp == true表示首字母大写
+        int flag = 0;//为1表示下一个字母大写
+        if(firstUp == true){
+            flag = 1;
+        }
+        StringBuilder sbchar = new StringBuilder("");
+        char[] chars = item.toCharArray();
+
+        for(char c : chars){
+            if(c == '_'){
+                flag = 1;
+            }else{
+                if(flag == 1){
+                    flag = 0;
+                    sbchar.append(Character.toUpperCase(c));
+                }else{
+                    sbchar.append(c);
+                }
+            }
+        }
+        return sbchar.toString();
     }
 
     public static String getAAs(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
-        int flag = 0;
         for(String item : strs){
-            chars = item.toCharArray();
             sbchar.append("a.").append(item);
             if(item.indexOf("_") != -1){
                 sbchar.append(" as ");
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
             }
             sbchar.append(",");
         }
-
         return sbchar.substring(0,sbchar.length()-1).toString();
     }
 
     //person;userId;otherId;created;modified;status
     public static String getFirstUppercase(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
         int flag = 0;
         for(String item : strs){
-            chars = item.toCharArray();
             if(item.indexOf("_") != -1){
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
             }else{
                 sbchar.append(item);
             }
             sbchar.append(";");
         }
-
         return sbchar.substring(0,sbchar.length()-1).toString();
     }
 
     //获得有#号的
-    public static String getJin(String result){
+    public static String getJing(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
         int flag = 0;
         for(String item : strs){
-            chars = item.toCharArray();
             sbchar.append("#");
             if(item.indexOf("_") != -1){
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
             }else{
                 sbchar.append(item);
             }
@@ -251,58 +246,30 @@ public class ParseDBInfo {
     }
 
     //获得有#{}号的
-    public static String getJinMybatis(String result){
+    public static String getJingMybatis(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
         int flag = 0;
         for(String item : strs){
-            chars = item.toCharArray();
             sbchar.append("#{");
             if(item.indexOf("_") != -1){
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
             }else{
                 sbchar.append(item);
             }
             sbchar.append("},");
         }
-
         return sbchar.substring(0,sbchar.length()-1).toString();
     }
 
     //获取 private String xxxx;
     public static String getMemberProperties(String result){
         String[] strs = result.split(",");
-        char[] chars = null;
         StringBuilder sbchar = new StringBuilder();
-        int flag = 0;
         for(String item : strs){
             sbchar.append("private String ");
-            chars = item.toCharArray();
             if(item.indexOf("_") != -1){
-                for(char c : chars){
-                    if(c == '_'){
-                        flag = 1;
-                    }else{
-                        if(flag == 1){
-                            flag = 0;
-                            sbchar.append(Character.toUpperCase(c));
-                        }else{
-                            sbchar.append(c);
-                        }
-                    }
-                }
+                sbchar.append(toTuoFengName(item,false));
             }else{
                 sbchar.append(item);
             }
