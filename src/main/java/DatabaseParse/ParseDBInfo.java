@@ -55,10 +55,10 @@ public class ParseDBInfo {
     /** 生成mysql的ibatisXml文件 **/
     //freemarker
     public static void buildIbatisMysqlXml(TableModel tableModel){
+        String pojoClassPath = "com.onway.module.pojo";
         String TEMPLATE_PATH = "D://XSBDownload";//模板位置
         String TEMPLATE_NAME= "ibatis_template.xml";//模板名字
         String OUTPUT_PATH= "D://XSBDownload//";//生成地址
-        String pojoClassPath = "com.onway.model.pojo";
 
         Configuration configuration = new Configuration();
         Writer out = null;
@@ -77,7 +77,7 @@ public class ParseDBInfo {
             // step4 加载模版文件
             Template template = configuration.getTemplate(TEMPLATE_NAME,"UTF-8");
             // step5 生成数据
-            File docFile = new File(OUTPUT_PATH+"AutoCodeDemo.xml");
+            File docFile = new File(OUTPUT_PATH+tableModel.getTableName()+"-sqlmap.xml");
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile),"UTF-8"));
             // step6 输出文件
             template.process(dataMap, out);
